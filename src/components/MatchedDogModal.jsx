@@ -28,6 +28,7 @@ const MatchedDogModal = ({ isOpen, onClose, match }) => {
                 <Heading size="md">{match.name}</Heading>
                 <Text>Breed: {match.breed}</Text>
                 <Text>Age: {match.age} years</Text>
+                <Text>Zip Code: {match.zip_code}</Text>
               </CardBody>
             </Card>
           ) : (
