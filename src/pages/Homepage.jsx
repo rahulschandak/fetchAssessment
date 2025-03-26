@@ -79,6 +79,37 @@ const HomePage = () => {
     setPrevPage(prevPage);
   };
 
+  const handleClear = async () => {
+    if (
+      selectedBreed === "" &&
+      zipCode === "" &&
+      ageMin === "" &&
+      ageMax === "" &&
+      sortField === "breed" &&
+      sortOrder === "asc" &&
+      itemsPerPage === 10
+    ) {
+      return;
+    }
+
+    setSelectedBreed("")
+    setZipCode("")
+    setAgeMin("")
+    setAgeMax("")
+    setSortField("breed")
+    setSortOrder("asc")
+    setItemsPerPage(10)
+
+    const { dogs, nextPage, prevPage } = await fetchDogs();
+    setDogs(dogs);
+    setNextPage(nextPage);
+    setPrevPage(prevPage);
+  };
+
+  useEffect(() => {
+    handleSearch();
+  }, [selectedBreed, zipCode, ageMin, ageMax, sortField, sortOrder, itemsPerPage]);
+
   const handlePagination = async (query) => {
     console.log(query);
     if (!query) return;
@@ -226,6 +257,7 @@ const HomePage = () => {
                 }}
                 w="full"
               >
+                <option value="10">Items per page</option>
                 <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="15">15</option>
@@ -233,7 +265,7 @@ const HomePage = () => {
               </Select>
             </GridItem>
 
-            <GridItem colSpan={{ base: 2, md: 2 }}>
+            <GridItem colSpan={{ base: 2, md: 1 }}>
               <Button colorScheme="green" w="full" onClick={handleSearch}>
                 Search
               </Button>
@@ -254,6 +286,13 @@ const HomePage = () => {
                 Generate Match
               </Button>
             </GridItem>
+
+            <GridItem colSpan={{ base: 2, md: 1 }}>
+              <Button colorScheme="red" w="full" onClick={handleClear}>
+                Clear
+              </Button>
+            </GridItem>
+
           </Grid>
         </Box>
 
