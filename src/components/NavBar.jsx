@@ -5,7 +5,8 @@ import { Flex, Link, Text, Spacer } from "@chakra-ui/react";
 const NavBar = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
+  const apiUrl = import.meta.env.VITE_API_URL;
+  
   const handleClick = async (e) => {
     navigate("/search");
   }
