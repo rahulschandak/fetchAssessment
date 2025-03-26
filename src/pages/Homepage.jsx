@@ -20,6 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 
+import { fetchBreeds, fetchDogs } from "../services/api";
 import DogCard from "../components/DogCard";
 import NavBar from "../components/NavBar";
 import MatchedDogModal from "../components/MatchedDogModal";
@@ -44,58 +45,46 @@ const HomePage = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    fetch(`${apiUrl}/dogs/breeds`, {
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setBreeds(data);
-        fetchDogs();
-      })
-      .catch((err) => console.error("Error fetching breeds:", err));
+    const loadData = async () => {
+      try {
+        const breedData = await fetchBreeds();
+        setBreeds(breedData);
+        const { dogs, nextPage, prevPage } = await fetchDogs();
+        setDogs(dogs);
+        setNextPage(nextPage);
+        setPrevPage(prevPage);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+    loadData();
   }, []);
 
-  const fetchDogs = async (query = "") => {
-    try {
-      const searchResponse = await fetch(
-        `${apiUrl}/dogs/search?sort=${sortField}:${sortOrder}&size=10${query}`,
-        { credentials: "include" }
-      );
-      const searchData = await searchResponse.json();
-      const resultIds = searchData.resultIds;
-
-      if (resultIds.length === 0) {
-        setDogs([]);
-      } else {
-        const dogDetails = await fetch(`${apiUrl}/dogs`, {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(resultIds),
-        }).then((res) => res.json());
-
-        setDogs(dogDetails);
-        setNextPage(searchData.next);
-        setPrevPage(searchData.prev);
-      }
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  const handleSearch = () => {
+  const handleSearch = async () => {
     let query = "";
     if (selectedBreed) query += `&breeds=${selectedBreed}`;
     if (zipCode) query += `&zipCodes=${zipCode}`;
     if (ageMin) query += `&ageMin=${ageMin}`;
     if (ageMax) query += `&ageMax=${ageMax}`;
 
-    fetchDogs(query);
+    const { dogs, nextPage, prevPage } = await fetchDogs(query, sortField, sortOrder);
+    setDogs(dogs);
+    setNextPage(nextPage);
+    setPrevPage(prevPage);
   };
 
-  const handlePagination = (url) => {
-    if (!url) return;
-    fetchDogs(url);
+  const handlePagination = async(query) => {
+    console.log(query)
+    if (!query) return;
+
+    try {
+      const { dogs, nextPage, prevPage } = await fetchDogs(query);
+      setDogs(dogs);
+      setNextPage(nextPage);
+      setPrevPage(prevPage);
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   const handleFavorite = (dogId) => {
