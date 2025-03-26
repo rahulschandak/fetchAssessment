@@ -35,13 +35,14 @@ const HomePage = () => {
   const [ageMax, setAgeMax] = useState("");
   const [sortField, setSortField] = useState("breed");
   const [sortOrder, setSortOrder] = useState("asc");
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [nextPage, setNextPage] = useState(null);
   const [prevPage, setPrevPage] = useState(null);
+
   const [match, setMatch] = useState();
   const [favorites, setFavorites] = useState([]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -70,7 +71,8 @@ const HomePage = () => {
     const { dogs, nextPage, prevPage } = await fetchDogs(
       query,
       sortField,
-      sortOrder
+      sortOrder,
+      itemsPerPage
     );
     setDogs(dogs);
     setNextPage(nextPage);
@@ -82,7 +84,12 @@ const HomePage = () => {
     if (!query) return;
 
     try {
-      const { dogs, nextPage, prevPage } = await fetchDogs(query);
+      const { dogs, nextPage, prevPage } = await fetchDogs(
+        query,
+        sortField,
+        sortOrder,
+        itemsPerPage
+      );
       setDogs(dogs);
       setNextPage(nextPage);
       setPrevPage(prevPage);
@@ -211,19 +218,38 @@ const HomePage = () => {
               </Select>
             </GridItem>
 
+            <GridItem colSpan={{ base: 2, md: 1 }}>
+              <Select
+                value={itemsPerPage}
+                onChange={(e) => {
+                  setItemsPerPage(e.target.value);
+                }}
+                w="full"
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+              </Select>
+            </GridItem>
+
             <GridItem colSpan={{ base: 2, md: 2 }}>
               <Button colorScheme="green" w="full" onClick={handleSearch}>
                 Search
               </Button>
             </GridItem>
 
-            <GridItem colSpan={{ base: 2, md: 2 }}>
+            <GridItem colSpan={{ base: 2, md: 1 }}>
               <Button
                 colorScheme="green"
                 w="full"
                 onClick={generateMatch}
                 isDisabled={!favorites.length}
-                title={!favorites.length ? "Please add some favorites to generate a match" : ""}
+                title={
+                  !favorites.length
+                    ? "Please add some favorites to generate a match"
+                    : ""
+                }
               >
                 Generate Match
               </Button>

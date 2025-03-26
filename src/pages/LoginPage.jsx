@@ -99,7 +99,7 @@ const LoginPage = () => {
                 value={formData.email}
                 onChange={handleChange}
                 focusBorderColor="green.400"
-                placeholder="rahul@domain.com"
+                placeholder="rahul@xyz.com"
               />
             </FormControl>
 
@@ -120,6 +120,10 @@ const LoginPage = () => {
             </Button>
           </VStack>
         </form>
+
+        <Text mt={4} fontSize="sm" color="gray.500" textAlign="center">
+          Created by Rahul Chandak
+        </Text>
       </Container>
     </Box>
   );

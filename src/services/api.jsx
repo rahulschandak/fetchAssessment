@@ -14,11 +14,12 @@ export const fetchBreeds = async () => {
 export const fetchDogs = async (
   query = "",
   sortField = "breed",
-  sortOrder = "asc"
+  sortOrder = "asc",
+  itemsPerPage = "10"
 ) => {
   try {
     const searchResponse = await fetch(
-      `${apiUrl}/dogs/search?sort=${sortField}:${sortOrder}&size=12${query}`,
+      `${apiUrl}/dogs/search?sort=${sortField}:${sortOrder}&size=${itemsPerPage}${query}`,
       { credentials: "include" }
     );
     const searchData = await searchResponse.json();
