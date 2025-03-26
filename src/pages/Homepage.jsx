@@ -21,7 +21,6 @@ import {
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 
 import { fetchBreeds, fetchDogs } from "../services/api";
-import DogCard from "../components/DogCard";
 import NavBar from "../components/NavBar";
 import MatchedDogModal from "../components/MatchedDogModal";
 
