@@ -1,12 +1,25 @@
-# React + Vite
+# Description
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is my attempt to solve the Fetch Frontend - Take Home Exercise
 
-Currently, two official plugins are available:
+It is live and hosted on [https://fetchbuddy.netlify.app/](https://fetchbuddy.netlify.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+It was built using React JS and Chakra UI as the component library and Vite as the build tool.
 
-## Expanding the ESLint configuration
+For more details/ feedback/ suggestions/ help with this project please reachout on [LinkedIn](https://www.linkedin.com/in/rahulschandak/).
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Available Scripts
+
+Create a .env file in the project root and add the variable - 
+```bash
+VITE_API_URL=https://frontend-take-home-service.fetch.com
+```
+
+In the project directory, you can run - 
+```bash
+npm run dev
+```
+
+Runs the app in the development mode.
+
+Open [http://localhost:5173](http://localhost:5173) to view it in your browser.
