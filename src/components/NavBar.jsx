@@ -26,7 +26,6 @@ const NavBar = () => {
       console.log("Logout successful");
       navigate("/");
     } catch (error) {
-      navigate("/");
       setError(error.message);
     }
   };
@@ -39,6 +38,7 @@ const NavBar = () => {
       <Spacer />
       <Link
         as="button"
+        fontWeight="bold"
         onClick={handleLogout}
         _hover={{ textDecoration: "none", color: "gray.200" }}
       >

@@ -177,7 +177,7 @@ const HomePage = () => {
       <Container maxW="8xl" py={8}>
         <Box bg="white" p={6} borderRadius="lg" shadow="md">
           <Heading size="lg" mb={4} textAlign="center">
-            Search for Your New Best Friend 🐶
+          {"\u{1F415}"} Adopt Your Perfect Pup Today {"\u{1F415}"}
           </Heading>
           <Grid templateColumns={{ base: "1fr", md: "repeat(6, 1fr)" }} gap={4}>
             <GridItem colSpan={{ base: 2, md: 2 }}>

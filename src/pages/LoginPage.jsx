@@ -74,7 +74,7 @@ const LoginPage = () => {
     >
       <Container maxW="sm" p={6} bg="white" borderRadius="lg" shadow="lg">
         <Heading as="h2" size="lg" mb={6} textAlign="center">
-          Welcome to FetchBuddy 🐶!
+        <Text>Welcome to FetchBuddy {"\u{1F415}"}</Text>
         </Heading>
 
         <form onSubmit={handleSubmit}>
