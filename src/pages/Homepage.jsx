@@ -19,7 +19,8 @@ import {
   useDisclosure
 } from "@chakra-ui/react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { fetchBreeds, fetchDogs, generateMatch } from "../services/api";
+
+import DogCard from "../components/DogCard";
 import NavBar from "../components/NavBar";
 import MatchedDogModal from "../components/MatchedDogModal";
 
@@ -43,21 +44,16 @@ const HomePage = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const breedData = await fetchBreeds();
-        setBreeds(breedData);
-        const { dogs, nextPage, prevPage } = await fetchDogs();
-        setDogs(dogs);
-        setNextPage(nextPage);
-        setPrevPage(prevPage);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-    loadData();
+    fetch(`${apiUrl}/dogs/breeds`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setBreeds(data);
+        fetchDogs();
+      })
+      .catch((err) => console.error("Error fetching breeds:", err));
   }, []);
-  
 
   const fetchDogs = async (query = "") => {
     try {
@@ -87,21 +83,14 @@ const HomePage = () => {
     }
   };
 
-  const handleSearch = async () => {
-    try {
-      let query = "";
-      if (selectedBreed) query += `&breeds=${selectedBreed}`;
-      if (zipCode) query += `&zipCodes=${zipCode}`;
-      if (ageMin) query += `&ageMin=${ageMin}`;
-      if (ageMax) query += `&ageMax=${ageMax}`;
-  
-      const { dogs, nextPage, prevPage } = await fetchDogs(query, sortField, sortOrder);
-      setDogs(dogs);
-      setNextPage(nextPage);
-      setPrevPage(prevPage);
-    } catch (error) {
-      setError(error.message);
-    }
+  const handleSearch = () => {
+    let query = "";
+    if (selectedBreed) query += `&breeds=${selectedBreed}`;
+    if (zipCode) query += `&zipCodes=${zipCode}`;
+    if (ageMin) query += `&ageMin=${ageMin}`;
+    if (ageMax) query += `&ageMax=${ageMax}`;
+
+    fetchDogs(query);
   };
 
   const handlePagination = (url) => {
@@ -117,15 +106,39 @@ const HomePage = () => {
     }
   };
 
-  const generateMatchHandler = async () => {
-  try {
-    const matchedDogDetails = await generateMatch(favorites);
-    setMatch(matchedDogDetails[0]);
-    onOpen();
-  } catch (error) {
-    setError(error.message);
-  }
-};
+  const generateMatch = async () => {
+    if (favorites.length === 0) {
+      setError("Please select at least one favorite dog.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${apiUrl}/dogs/match`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(favorites),
+      });
+
+      if (!response.ok) throw new Error("Match generation failed.");
+
+      const matchData = await response.json();
+
+      const matchedDogResponse = await fetch(`${apiUrl}/dogs`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify([matchData.match]),
+      });
+
+      const matchedDogDetails = await matchedDogResponse.json();
+
+      setMatch(matchedDogDetails[0])
+      onOpen();
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   return (
     <Box bg="gray.50" minH="100vh">
@@ -212,7 +225,7 @@ const HomePage = () => {
             </GridItem>
 
             <GridItem colSpan={{ base: 2, md: 2 }}>
-              <Button colorScheme="green" w="full" onClick={generateMatchHandler}>
+              <Button colorScheme="green" w="full" onClick={generateMatch}>
                 Generate Match
               </Button>
             </GridItem>
