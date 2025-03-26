@@ -6,6 +6,10 @@ const NavBar = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const handleClick = async (e) => {
+    navigate("/search");
+  }
+
   const handleLogout = async (e) => {
     e.preventDefault();
     setError("");
@@ -29,7 +33,7 @@ const NavBar = () => {
 
   return (
     <Flex as="nav" bg="green.500" color="white" p={4} align="center">
-      <Text fontSize="xl" fontWeight="bold">
+      <Text fontSize="xl" fontWeight="bold" onClick={handleClick}>
         FetchBuddy
       </Text>
       <Spacer />

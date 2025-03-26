@@ -16,7 +16,7 @@ import {
   Heading,
   Divider,
   IconButton,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 
@@ -67,14 +67,18 @@ const HomePage = () => {
     if (ageMin) query += `&ageMin=${ageMin}`;
     if (ageMax) query += `&ageMax=${ageMax}`;
 
-    const { dogs, nextPage, prevPage } = await fetchDogs(query, sortField, sortOrder);
+    const { dogs, nextPage, prevPage } = await fetchDogs(
+      query,
+      sortField,
+      sortOrder
+    );
     setDogs(dogs);
     setNextPage(nextPage);
     setPrevPage(prevPage);
   };
 
-  const handlePagination = async(query) => {
-    console.log(query)
+  const handlePagination = async (query) => {
+    console.log(query);
     if (!query) return;
 
     try {
@@ -122,7 +126,7 @@ const HomePage = () => {
 
       const matchedDogDetails = await matchedDogResponse.json();
 
-      setMatch(matchedDogDetails[0])
+      setMatch(matchedDogDetails[0]);
       onOpen();
     } catch (error) {
       setError(error.message);
@@ -214,7 +218,13 @@ const HomePage = () => {
             </GridItem>
 
             <GridItem colSpan={{ base: 2, md: 2 }}>
-              <Button colorScheme="green" w="full" onClick={generateMatch}>
+              <Button
+                colorScheme="green"
+                w="full"
+                onClick={generateMatch}
+                isDisabled={!favorites.length}
+                title={!favorites.length ? "Please add some favorites to generate a match" : ""}
+              >
                 Generate Match
               </Button>
             </GridItem>
@@ -245,7 +255,13 @@ const HomePage = () => {
 
                 {/* Heart Icon Button */}
                 <IconButton
-                  icon={favorites.includes(dog.id) ? <AiFillHeart /> : <AiOutlineHeart />}
+                  icon={
+                    favorites.includes(dog.id) ? (
+                      <AiFillHeart />
+                    ) : (
+                      <AiOutlineHeart />
+                    )
+                  }
                   onClick={() => handleFavorite(dog.id)}
                   aria-label="Add to favorites"
                   size="md"
@@ -288,7 +304,6 @@ const HomePage = () => {
         </HStack>
 
         <MatchedDogModal isOpen={isOpen} onClose={onClose} match={match} />
-
       </Container>
     </Box>
   );

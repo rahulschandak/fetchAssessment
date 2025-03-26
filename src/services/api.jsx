@@ -18,7 +18,7 @@ export const fetchDogs = async (
 ) => {
   try {
     const searchResponse = await fetch(
-      `${apiUrl}/dogs/search?sort=${sortField}:${sortOrder}&size=10${query}`,
+      `${apiUrl}/dogs/search?sort=${sortField}:${sortOrder}&size=12${query}`,
       { credentials: "include" }
     );
     const searchData = await searchResponse.json();
